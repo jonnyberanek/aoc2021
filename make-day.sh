@@ -1,50 +1,47 @@
-base_pkg=aoc2021
-
 if [ -z "$1" ]
   then
     echo "Day name must be provided."
     exit
 fi
 
-cd src
+cd days
 
 mkdir $1
 cd $1
 
-echo 'package main
+echo 'import sys
 
-import (
-	"fmt"
-	"utils"
-	"'$1'/sol"
-)
+def parseInput(filename):
+  f = open(filename, "r")
+  for rowIdx, line in enumerate(f):
+    text = line.rstrip()
+    raise NotImplementedError()
 
-func pickPart(part int) func(string) string {
-	if (part == 1){
-		return sol.Part1
-	} else if (part == 2) {
-		return sol.Part2
-	}
-	panic(fmt.Sprintf("Part %d does not exist", part))
-}
+def partOne(data):
+  raise NotImplementedError()
 
-func main(){
-	filename, part := utils.ReadCliArgs()
+def partTwo(data):
+  raise NotImplementedError()
 
-	value :=  pickPart(part)(filename)
-	fmt.Printf("Answer is %s\n", value)
-}' > main.go
+# Parses input data and and routes to correct solution body
+#  May need modified if inputs are read differently between parts
+def main(filename: str, part: int):
+  data = parseInput(filename)
+  answer = (partTwo if part == 2 else partOne)(data)
+  print(f"Answer is {answer}.")
 
-mkdir sol
-echo 'package sol
+# For parsing cli args and starting program
+if __name__ == "__main__":
+  if(len(sys.argv) < 3):
+    print("Exiting, part number and filename must be provided.")
+    sys.exit(1)
 
-func Part1(filename string) string {
-	return filename
-}
+  partNum = int(sys.argv[1])
+  if(partNum != 1 and partNum != 2):
+    raise "Part number value must be 1 or 2"
 
-func Part2(filename string) string {
-	return filename
-}' > sol/sol.go
+  sys.exit(main(sys.argv[2], partNum))
+' > main.py
 
 touch input.txt
 touch test.txt
